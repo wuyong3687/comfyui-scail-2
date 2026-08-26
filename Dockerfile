@@ -76,3 +76,4 @@ RUN rm -rf /tmp/*
 
 # --- 5. 设置容器启动命令 ---
 CMD python /comfyui/main.py --listen 0.0.0.0 --port 8188
+
