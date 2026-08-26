@@ -1,11 +1,27 @@
-# 基础镜像：使用 RunPod 官方最新版 ComfyUI 环境
-FROM runpod/worker-comfyui:latest-base
+# 基础镜像：CUDA 13.0
+FROM nvidia/cuda:13.0.0-base-ubuntu22.04
 
-# 构建参数：用于访问 Hugging Face 的私有模型（如果需要）
-# 用法：docker build --build-arg HF_TOKEN=$HF_TOKEN ...
+# 构建参数：用于访问 Hugging Face 的私有模型
 ARG HF_TOKEN=""
 
-# 固定 ComfyUI 版本为 master 分支（最新版）
+# --- 安装基础环境和 ComfyUI（一次性完成）---
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    git \
+    wget \
+    && rm -rf /var/lib/apt/lists/*
+
+# 创建 python 软链接
+RUN ln -s /usr/bin/python3 /usr/bin/python
+
+# 克隆 ComfyUI 并安装核心依赖
+RUN git clone https://github.com/comfyanonymous/ComfyUI.git /comfyui && \
+    pip install --upgrade pip && \
+    pip install -r /comfyui/requirements.txt && \
+    pip install comfy-cli
+
+# --- 固定 ComfyUI 版本为 master 分支（最新版）---
 RUN cd /comfyui && \
     git checkout master && \
     git pull && \
