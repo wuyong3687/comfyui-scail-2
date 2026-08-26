@@ -5,6 +5,11 @@ FROM runpod/worker-comfyui:latest-base
 # 用法：docker build --build-arg HF_TOKEN=$HF_TOKEN ...
 ARG HF_TOKEN=""
 
+# 固定 ComfyUI 版本为 0.29.0
+RUN cd /comfyui && \
+    git checkout v0.29.0 && \
+    pip install -r requirements.txt
+
 # --- 1. 安装自定义节点 (Custom Nodes) ---
 # 锁定特定版本以保证稳定性，如果版本不存在则回退到默认分支
 RUN git clone https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes /comfyui/custom_nodes/ComfyUI_Comfyroll_CustomNodes && \
@@ -31,11 +36,12 @@ RUN git clone https://github.com/yolain/ComfyUI-Easy-Use /comfyui/custom_nodes/C
     cd /comfyui/custom_nodes/ComfyUI-Easy-Use && \
     (git checkout 625efbfa2fc20c31797dfffcbb41a26b6d91ab7b 2>/dev/null || (git fetch origin 625efbfa2fc20c31797dfffcbb41a26b6d91ab7b --depth=1 && git checkout 625efbfa2fc20c31797dfffcbb41a26b6d91ab7b) || echo "WARN: commit 625efbf... unreachable, falling back to default branch HEAD")
 
-# ComfyUI-FeiHou-Toolbox (提供 FastGroupsBypassSwitch, SCAIL2ColoredMask 等核心节点)
-RUN git clone https://github.com/FX-FeiHou/ComfyUI-FeiHou-Toolbox /comfyui/custom_nodes/ComfyUI-FeiHou-Toolbox
+RUN rm -rf /comfyui/custom_nodes/ComfyUI-FeiHou-Toolbox && \
+    git clone https://github.com/FX-FeiHou/ComfyUI-FeiHou-Toolbox /comfyui/custom_nodes/ComfyUI-FeiHou-Toolbox || exit 1
 
-# ComfyUI-Crystools (提供 Switch any [Crystools] 节点)
-RUN git clone https://github.com/crystian/ComfyUI-Crystools.git /comfyui/custom_nodes/ComfyUI-Crystools
+# 强制重新克隆，如果失败则终止构建
+RUN rm -rf /comfyui/custom_nodes/ComfyUI-Crystools && \
+    git clone https://github.com/crystian/ComfyUI-Crystools.git /comfyui/custom_nodes/ComfyUI-Crystools || exit 1
 
 # scail-auto-extend (解决长视频色彩漂移问题的关键插件)
 RUN git clone https://github.com/Brobert-in-aus/scail-auto-extend.git /comfyui/custom_nodes/scail-auto-extend
