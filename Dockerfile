@@ -5,9 +5,10 @@ FROM runpod/worker-comfyui:latest-base
 # 用法：docker build --build-arg HF_TOKEN=$HF_TOKEN ...
 ARG HF_TOKEN=""
 
-# 固定 ComfyUI 版本为 0.29.0
+# 固定 ComfyUI 版本为 master 分支（最新版）
 RUN cd /comfyui && \
-    git checkout v0.29.0 && \
+    git checkout master && \
+    git pull && \
     pip install -r requirements.txt
 
 # --- 1. 安装自定义节点 (Custom Nodes) ---
