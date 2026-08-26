@@ -38,7 +38,7 @@ RUN git clone https://github.com/FX-FeiHou/ComfyUI-FeiHou-Toolbox /comfyui/custo
 RUN git clone https://github.com/crystian/ComfyUI-Crystools.git /comfyui/custom_nodes/ComfyUI-Crystools
 
 # scail-auto-extend (解决长视频色彩漂移问题的关键插件)
-RUN git clone https://github.com/shockz1/scail-auto-extend.git /comfyui/custom_nodes/scail-auto-extend
+RUN git clone https://github.com/Brobert-in-aus/scail-auto-extend.git /comfyui/custom_nodes/scail-auto-extend
 
 # 安装所有自定义节点的 Python 依赖
 RUN cd /comfyui/custom_nodes/ComfyUI-Easy-Use && pip install -r requirements.txt || true && \
