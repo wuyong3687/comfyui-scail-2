@@ -61,7 +61,7 @@ RUN wget -nv -P /comfyui/models/checkpoints/ "https://huggingface.co/wuyong3687/
 
 RUN wget -nv -P /comfyui/models/loras/ "https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/Lightx2v/lightx2v_I2V_14B_480p_cfg_step_distill_rank256_bf16.safetensors"
 
-RUN wget -nv -O /comfyui/models/loras/"Q弹 低.safetensors" "https://huggingface.co/wuyong3687/DongZuoTiHuan/resolve/main/Q%E5%BC%B93.safetensors"
+RUN curl -L -H "Authorization: Bearer $HF_TOKEN" -o /comfyui/models/loras/"Q弹 低.safetensors" "https://huggingface.co/wuyong3687/DongZuoTiHuan/resolve/main/Q%E5%BC%B93.safetensors"
 
 RUN wget -nv -P /comfyui/models/loras/ "https://huggingface.co/wuyong3687/DongZuoTiHuan/resolve/main/wan2.1_SCAIL_2_DPO_lora_bf16.safetensors"
 
