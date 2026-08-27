@@ -51,7 +51,7 @@ RUN git clone https://github.com/crystian/ComfyUI-Crystools.git /comfyui/custom_
 RUN git clone https://github.com/Brobert-in-aus/scail-auto-extend.git /comfyui/custom_nodes/scail-auto-extend
 
 # ============================================================
-# 5. 安装自定义节点的 Python 依赖（容错）
+# 5. 安装自定义节点的 Python 依赖
 # ============================================================
 RUN cd /comfyui/custom_nodes/ComfyUI-Easy-Use && pip install -r requirements.txt 2>/dev/null || true && \
     cd /comfyui/custom_nodes/ComfyUI-VideoHelperSuite && pip install -r requirements.txt 2>/dev/null || true && \
@@ -79,40 +79,40 @@ RUN mkdir -p /comfyui/models/text_encoders \
     /comfyui/input
 
 # ============================================================
-# 8. 下载模型文件（直接 wget 到 /comfyui/models/ 对应目录）
+# 8. 下载模型文件（wget -nv 减少日志）
 # ============================================================
 
 # Text Encoder (~6.4GB)
-RUN wget -P /comfyui/models/text_encoders/ "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+RUN wget -nv -P /comfyui/models/text_encoders/ "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors"
 
 # CLIP Vision (~1.2GB)
-RUN wget -P /comfyui/models/clip_vision/ "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/clip_vision/clip_vision_h.safetensors"
+RUN wget -nv -P /comfyui/models/clip_vision/ "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/clip_vision/clip_vision_h.safetensors"
 
 # VAE (~242MB)
-RUN wget -P /comfyui/models/vae/ "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/vae/wan_2.1_vae.safetensors"
+RUN wget -nv -P /comfyui/models/vae/ "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/vae/wan_2.1_vae.safetensors"
 
 # SCAIL-2 核心模型 (~13.3GB)
-RUN wget -P /comfyui/models/diffusion_models/ "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/diffusion_models/wan2.1_t2v_14B_fp8_scaled.safetensors"
+RUN wget -nv -P /comfyui/models/diffusion_models/ "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/diffusion_models/wan2.1_t2v_14B_fp8_scaled.safetensors"
 
-# SAM3 模型 (~1.7GB) — 从你的 HF 仓库下载
-RUN wget -P /comfyui/models/checkpoints/ "https://huggingface.co/wuyong3687/DongZuoTiHuan/resolve/main/sam3.1_multiplex_fp16.safetensors"
+# SAM3 模型 (~1.7GB)
+RUN wget -nv -P /comfyui/models/checkpoints/ "https://huggingface.co/wuyong3687/DongZuoTiHuan/resolve/main/sam3.1_multiplex_fp16.safetensors"
 
 # Lightx2v LoRA (~2.9GB)
-RUN wget -P /comfyui/models/loras/ "https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/Lightx2v/lightx2v_I2V_14B_480p_cfg_step_distill_rank256_bf16.safetensors"
+RUN wget -nv -P /comfyui/models/loras/ "https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/Lightx2v/lightx2v_I2V_14B_480p_cfg_step_distill_rank256_bf16.safetensors"
 
-# Q弹 LoRA — 直接下载，不重命名
-RUN wget -P /comfyui/models/loras/ "https://huggingface.co/wuyong3687/DongZuoTiHuan/resolve/main/Q%E5%BC%B93.safetensors"
+# Q弹 LoRA — 用 curl 带 HF_TOKEN 认证下载
+RUN curl -L -H "Authorization: Bearer $HF_TOKEN" -o /comfyui/models/loras/Q弹3.safetensors "https://huggingface.co/wuyong3687/DongZuoTiHuan/resolve/main/Q%E5%BC%B93.safetensors"
 
 # DPO LoRA (~1.2GB)
-RUN wget -P /comfyui/models/loras/ "https://huggingface.co/wuyong3687/DongZuoTiHuan/resolve/main/wan2.1_SCAIL_2_DPO_lora_bf16.safetensors"
+RUN wget -nv -P /comfyui/models/loras/ "https://huggingface.co/wuyong3687/DongZuoTiHuan/resolve/main/wan2.1_SCAIL_2_DPO_lora_bf16.safetensors"
 
 # Relighting LoRA (~1.2GB)
-RUN wget -P /comfyui/models/loras/ "https://huggingface.co/wuyong3687/DongZuoTiHuan/resolve/main/Scail2-relighting-lora.safetensors"
+RUN wget -nv -P /comfyui/models/loras/ "https://huggingface.co/wuyong3687/DongZuoTiHuan/resolve/main/Scail2-relighting-lora.safetensors"
 
 # ============================================================
 # 9. 下载参考图
 # ============================================================
-RUN wget -O /comfyui/input/00820.png "https://huggingface.co/wuyong3687/DongZuoTiHuan/resolve/main/00820.png" || echo "WARN: 00820.png download failed"
+RUN wget -nv -O /comfyui/input/00820.png "https://huggingface.co/wuyong3687/DongZuoTiHuan/resolve/main/00820.png" || echo "WARN: 00820.png download failed"
 
 # ============================================================
 # 10. 复制工作流文件
@@ -120,7 +120,7 @@ RUN wget -O /comfyui/input/00820.png "https://huggingface.co/wuyong3687/DongZuoT
 COPY "SCAIL-2动作迁移&角色替换工作流.json" /comfyui/input/workflow.json
 
 # ============================================================
-# 11. 验证文件是否真的在镜像里（构建时检查）
+# 11. 验证模型文件是否存在
 # ============================================================
 RUN echo "===== 验证模型文件 =====" && \
     ls -lh /comfyui/models/text_encoders/ && \
@@ -129,7 +129,6 @@ RUN echo "===== 验证模型文件 =====" && \
     ls -lh /comfyui/models/diffusion_models/ && \
     ls -lh /comfyui/models/checkpoints/ && \
     ls -lh /comfyui/models/loras/ && \
-    ls -lh /comfyui/input/ && \
     echo "===== 验证完成 ====="
 
 # ============================================================
