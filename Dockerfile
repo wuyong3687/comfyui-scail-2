@@ -76,54 +76,53 @@ RUN cd /comfyui/custom_nodes/ComfyUI-Easy-Use && pip install -r requirements.txt
 RUN pip install comfy-aimdo
 
 # --- 2. 下载模型文件 (Models) ---
-# 使用 wget 带重试机制，确保大文件下载成功
+# 使用 curl 带重试和超时机制，确保大文件下载成功
 
-# 创建所有模型目录
 RUN mkdir -p /comfyui/models/text_encoders /comfyui/models/clip_vision /comfyui/models/vae /comfyui/models/diffusion_models /comfyui/models/checkpoints /comfyui/models/loras /comfyui/input
 
 # 下载 Text Encoder
 RUN for i in 1 2 3 4 5; do \
-    wget -P /comfyui/models/text_encoders/ "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors" && break || sleep 30; \
+    curl -L --connect-timeout 60 --max-time 600 -o /comfyui/models/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors" && break || sleep 30; \
     done
 
 # 下载 CLIP Vision
 RUN for i in 1 2 3 4 5; do \
-    wget -P /comfyui/models/clip_vision/ "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/clip_vision/clip_vision_h.safetensors" && break || sleep 30; \
+    curl -L --connect-timeout 60 --max-time 600 -o /comfyui/models/clip_vision/clip_vision_h.safetensors "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/clip_vision/clip_vision_h.safetensors" && break || sleep 30; \
     done
 
 # 下载 VAE
 RUN for i in 1 2 3 4 5; do \
-    wget -P /comfyui/models/vae/ "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/vae/wan_2.1_vae.safetensors" && break || sleep 30; \
+    curl -L --connect-timeout 60 --max-time 600 -o /comfyui/models/vae/wan_2.1_vae.safetensors "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/vae/wan_2.1_vae.safetensors" && break || sleep 30; \
     done
 
 # 下载 SCAIL-2 核心模型（最大，最易卡住）
 RUN for i in 1 2 3 4 5; do \
-    wget -P /comfyui/models/diffusion_models/ "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/diffusion_models/wan2.1_t2v_14B_fp8_scaled.safetensors" && break || sleep 30; \
+    curl -L --connect-timeout 60 --max-time 1200 -o /comfyui/models/diffusion_models/wan2.1_t2v_14B_fp8_scaled.safetensors "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/diffusion_models/wan2.1_t2v_14B_fp8_scaled.safetensors" && break || sleep 30; \
     done
 
 # 下载 SAM3 模型
 RUN for i in 1 2 3 4 5; do \
-    wget -P /comfyui/models/checkpoints/ "https://huggingface.co/wuyong3687/DongZuoTiHuan/resolve/main/sam3.1_multiplex_fp16.safetensors" && break || sleep 30; \
+    curl -L --connect-timeout 60 --max-time 600 -o /comfyui/models/checkpoints/sam3.1_multiplex_fp16.safetensors "https://huggingface.co/wuyong3687/DongZuoTiHuan/resolve/main/sam3.1_multiplex_fp16.safetensors" && break || sleep 30; \
     done
 
 # 下载 Lightx2v LoRA
 RUN for i in 1 2 3 4 5; do \
-    wget -P /comfyui/models/loras/ "https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/Lightx2v/lightx2v_I2V_14B_480p_cfg_step_distill_rank256_bf16.safetensors" && break || sleep 30; \
+    curl -L --connect-timeout 60 --max-time 300 -o /comfyui/models/loras/lightx2v_I2V_14B_480p_cfg_step_distill_rank256_bf16.safetensors "https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/Lightx2v/lightx2v_I2V_14B_480p_cfg_step_distill_rank256_bf16.safetensors" && break || sleep 30; \
     done
 
 # 下载 Q弹 LoRA（重命名为 Q弹 低.safetensors）
 RUN for i in 1 2 3 4 5; do \
-    wget -O /comfyui/models/loras/"Q弹 低.safetensors" "https://huggingface.co/wuyong3687/DongZuoTiHuan/resolve/main/Q%E5%BC%B93.safetensors" && break || sleep 30; \
+    curl -L --connect-timeout 60 --max-time 300 -o /comfyui/models/loras/"Q弹 低.safetensors" "https://huggingface.co/wuyong3687/DongZuoTiHuan/resolve/main/Q%E5%BC%B93.safetensors" && break || sleep 30; \
     done
 
 # 下载 DPO LoRA
 RUN for i in 1 2 3 4 5; do \
-    wget -P /comfyui/models/loras/ "https://huggingface.co/wuyong3687/DongZuoTiHuan/resolve/main/wan2.1_SCAIL_2_DPO_lora_bf16.safetensors" && break || sleep 30; \
+    curl -L --connect-timeout 60 --max-time 300 -o /comfyui/models/loras/wan2.1_SCAIL_2_DPO_lora_bf16.safetensors "https://huggingface.co/wuyong3687/DongZuoTiHuan/resolve/main/wan2.1_SCAIL_2_DPO_lora_bf16.safetensors" && break || sleep 30; \
     done
 
 # 下载 Relighting LoRA
 RUN for i in 1 2 3 4 5; do \
-    wget -P /comfyui/models/loras/ "https://huggingface.co/wuyong3687/DongZuoTiHuan/resolve/main/Scail2-relighting-lora.safetensors" && break || sleep 30; \
+    curl -L --connect-timeout 60 --max-time 300 -o /comfyui/models/loras/Scail2-relighting-lora.safetensors "https://huggingface.co/wuyong3687/DongZuoTiHuan/resolve/main/Scail2-relighting-lora.safetensors" && break || sleep 30; \
     done
 
 # --- 3. 复制输入文件和工作流 ---
