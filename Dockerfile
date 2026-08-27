@@ -100,8 +100,8 @@ RUN wget -P /comfyui/models/checkpoints/ "https://huggingface.co/wuyong3687/Dong
 # Lightx2v LoRA (~2.9GB)
 RUN wget -P /comfyui/models/loras/ "https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/Lightx2v/lightx2v_I2V_14B_480p_cfg_step_distill_rank256_bf16.safetensors"
 
-# Q弹 LoRA — 下载并重命名为工作流需要的名称
-RUN wget -O /comfyui/models/loras/"Q弹 低.safetensors" "https://huggingface.co/wuyong3687/DongZuoTiHuan/resolve/main/Q%E5%BC%B93.safetensors"
+# Q弹 LoRA — 直接下载，不重命名
+RUN wget -P /comfyui/models/loras/ "https://huggingface.co/wuyong3687/DongZuoTiHuan/resolve/main/Q%E5%BC%B93.safetensors"
 
 # DPO LoRA (~1.2GB)
 RUN wget -P /comfyui/models/loras/ "https://huggingface.co/wuyong3687/DongZuoTiHuan/resolve/main/wan2.1_SCAIL_2_DPO_lora_bf16.safetensors"
