@@ -57,7 +57,7 @@ RUN wget -nv -P /comfyui/models/vae/ "https://huggingface.co/Comfy-Org/Wan_2.1_C
 
 RUN wget -nv -P /comfyui/models/diffusion_models/ "https://huggingface.co/Comfy-Org/SCAIL-2/resolve/main/diffusion_models/wan2.1_14B_SCAIL_2_fp8_scaled.safetensors"
 
-RUN wget -nv -P /comfyui/models/checkpoints/ "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/checkpoints/sam3.1_multiplex_fp16.safetensors"
+RUN wget -nv -P /comfyui/models/checkpoints/ "https://huggingface.co/wuyong3687/DongZuoTiHuan/resolve/main/sam3.1_multiplex_fp16.safetensors"
 
 RUN wget -nv -P /comfyui/models/loras/ "https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/Lightx2v/lightx2v_I2V_14B_480p_cfg_step_distill_rank256_bf16.safetensors"
 
